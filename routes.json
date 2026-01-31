@@ -3,6 +3,14 @@
     {
       "route": "/favicon.ico",
       "rewrite": "/assets/favicon.svg"
+    },
+    {
+      "route": "/en",
+      "rewrite": "/index.en.html"
+    },
+    {
+      "route": "/en/*",
+      "rewrite": "/index.en.html"
     }
   ]
 }
