@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Krzysztof Fieber – CV</title>
+  <meta name="description" content="CV Krzysztofa Fiebera: Full Stack .NET Developer (React, Angular, Azure, Docker).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="container">
+    <h1>Krzysztof Fieber</h1>
+    <p class="subtitle">Full Stack .NET Developer</p>
+    <ul class="contact">
+      <li>📍 Kraków, Polska</li>
+      <li>📞 <a href="tel:+48695166363">+48 695 166 363</a></li>
+      <li>✉️ <a href="mailto:krzysztoffieber@gmail.com">krzysztoffieber@gmail.com</a></li>
+      <li>🔗 <a href="https://linkedin.com/in/krzysztof-fieber-615277a3" rel="noopener" target="_blank">LinkedIn</a></li>
+      <li>💻 <a href="https://github.com/UltraViolet5" rel="noopener" target="_blank">GitHub</a></li>
+    </ul>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>Podsumowanie</h2>
+      <p>Full Stack .NET Developer z ponad 3-letnim doświadczeniem komercyjnym w tworzeniu aplikacji enterprise: backend, frontend i mobile. Silne zaplecze w .NET, React, Angular, SQL, Azure i architekturach konteneryzowanych. Doświadczenie w projektowaniu end‑to‑end, integracjach chmury, uwierzytelnianiu oraz systemach data‑driven.</p>
+    </section>
+
+    <section>
+      <h2>Doświadczenie</h2>
+      <article>
+        <h3>Full Stack Developer — ABB Business Services Sp. z o.o., Warszawa <span class="muted">(09.2022 – obecnie)</span></h3>
+        <ul>
+          <li>Rozwój funkcji full‑stack w .NET 8, React (TS/JS), Angular, EF Core 8.</li>
+          <li>Eksport CSV po stronie serwera z filtrowaniem OData; poprawa wydajności i skalowalności.</li>
+          <li>Współtworzenie komponentów dla 3D/HoloLens 2 we współpracy z zespołem Unity.</li>
+          <li>Praca w architekturze 7 kontenerów (Docker).</li>
+          <li>Redux i usprawnienia UI/UX w aplikacjach React.</li>
+          <li>Integracje z Azure Entra ID i Microsoft Graph (MSAL).</li>
+          <li>MongoDB/Mongoose w środowisku mikroserwisowym.</li>
+          <li>Responsywność i dostępność aplikacji web.</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Xamarin Developer — Navigal Sp. z o.o., Kraków <span class="muted">(09.2021 – 08.2022)</span></h3>
+        <ul>
+          <li>Android WMS: Xamarin.Android i Xamarin.Forms (Prism).</li>
+          <li>Projekt UI + logika backend, workflow w oparciu o focus z walidacją łańcuchową.</li>
+          <li>Integracje z usługami SOAP/WCF.</li>
+          <li>Wkład w rozwój WinForms.</li>
+          <li>MS SQL, LINQ, Git, TFS, narzędzia do obfuskacji.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Edukacja</h2>
+      <ul>
+        <li>Azure Cloud Engineer (24 laboratoria), 2024</li>
+        <li>Full‑Stack .NET Developer, CodeCool, 2020–2021</li>
+        <li>Architektura (I stopień), PK, 2011–2016 (nieukończone)</li>
+        <li>Matura dwujęzyczna (PL–FR), 2010</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Języki</h2>
+      <ul class="chips">
+        <li>Polski — ojczysty</li>
+        <li>Francuski — C1 (certyfikat Konsulatu Francji)</li>
+        <li>Angielski — B2</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Umiejętności</h2>
+      <div class="grid">
+        <div>
+          <h4>Backend</h4>
+          <ul>
+            <li>.NET, C#, EF Core, LINQ, OData, MSAL, Graph API</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Frontend</h4>
+          <ul>
+            <li>React (TS/JS), Redux, Angular, RWD, a11y</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Mobile</h4>
+          <ul>
+            <li>Xamarin.Android, Xamarin.Forms, Prism</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Cloud & DevOps</h4>
+          <ul>
+            <li>Azure, Docker</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Bazy danych</h4>
+          <ul>
+            <li>MS SQL, MongoDB</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Narzędzia</h4>
+          <ul>
+            <li>Git, TFS, Visual Studio, VS Code, Nivo</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2026 Krzysztof Fieber. Strona statyczna hostowana w Azure Static Web Apps.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Prosty dark-mode (auto oraz przełącznik klawiaturą: D)
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    function setTheme(dark) { document.documentElement.dataset.theme = dark ? 'dark' : 'light'; }
+    setTheme(prefersDark.matches);
+    prefersDark.addEventListener('change', e => setTheme(e.matches));
+    window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='d') document.documentElement.dataset.theme = (document.documentElement.dataset.theme==='dark'?'light':'dark');});
+  </script>
+</body>
+</html>

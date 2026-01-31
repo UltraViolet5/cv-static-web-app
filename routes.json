@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "route": "/favicon.ico",
+      "rewrite": "/assets/favicon.svg"
+    }
+  ]
+}
