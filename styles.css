@@ -1,13 +1,30 @@
-:root{--bg:#0b0c0f;--text:#e6e6e6;--muted:#9aa4af;--card:#151821;--brand:#6aa0ff;--link:#4ea1ff;--accent:#ffd166;}
-:root[data-theme='light']{--bg:#ffffff;--text:#1f2328;--muted:#5a6b7b;--card:#f6f8fa;--brand:#265dff;--link:#1d4ed8;--accent:#fb8500;}
+:root{--bg:#0b0c0f;--text:#e6e6e6;--muted:#9aa4af;--card:#151821;--brand:#6aa0ff;--link:#4ea1ff;--accent:#ffd166;--header-text:#1f2328}
+:root[data-theme='light']{--bg:#ffffff;--text:#1f2328;--muted:#5a6b7b;--card:#f6f8fa;--brand:#265dff;--link:#1d4ed8;--accent:#fb8500;--header-text:var(--text)}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background-color:var(--bg);color:var(--text);line-height:1.6}
+
+/* Fixed background image placed on the root element via a pseudo-element.
+   This keeps the image fixed to the viewport while the page content scrolls.
+   Using a pseudo-element is more reliable on mobile than background-attachment:fixed. */
+html::before{
+	content:'';
+	position:fixed;
+	inset:0;
+	background-image:url('/assets/zdjecie.jpeg');
+	background-size:cover;
+	background-position:center;
+	background-repeat:no-repeat;
+	z-index:-2; /* behind the gloss overlay (body::before z-index:-1) and behind content */
+}
 .container{max-width:920px;margin:0 auto;padding:24px}
 h1{font-size:2.25rem;margin:8px 0}
 .subtitle{color:var(--muted);margin-top:-6px}
 .contact{list-style:none;padding:0;margin:12px 0;display:flex;flex-wrap:wrap;gap:12px}
 .contact a{color:var(--link);text-decoration:none}
+/* Language switch (centered links) */
+.lang-switch{display:flex;justify-content:center;align-items:center;gap:8px;margin:12px 0;color:var(--muted)}
+.lang-switch a{color:var(--link);text-decoration:none;font-weight:600}
 section{background:var(--card);padding:16px 20px;border-radius:12px;margin:16px 0;border:1px solid rgba(255,255,255,0.06)}
 h2{margin:0 0 12px 0;font-size:1.25rem;border-left:4px solid var(--brand);padding-left:10px}
 h3{margin:10px 0;font-size:1.05rem}
@@ -18,3 +35,93 @@ ul{margin:6px 0 6px 1.1rem}
 .chips li{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);padding:6px 10px;border-radius:999px}
 .footer{color:var(--muted);text-align:center;margin:24px 0}
 @media (max-width:520px){h1{font-size:1.8rem}}
+
+/* Header-specific coloring: keep header text dark even in dark theme */
+header{color:var(--header-text)}
+header .subtitle{color:var(--muted)}
+header .contact{color:var(--header-text)}
+
+/* Animated background gloss */
+:root{--gloss:rgba(255,255,255,0.10);--gloss-peak:rgba(255,255,255,0.18);--gloss-duration:7s}
+:root[data-theme='light']{--gloss:rgba(0,0,0,0.06);--gloss-peak:rgba(0,0,0,0.10)}
+
+body::before{
+	content:'';
+	position:fixed;
+	inset:0;
+	pointer-events:none;
+	background:linear-gradient(120deg,
+		transparent 0%,
+		transparent 40%,
+		var(--gloss) 48%,
+		var(--gloss-peak) 50%,
+		var(--gloss) 52%,
+		transparent 60%,
+		transparent 100%);
+	transform:translateX(-120%);
+	mix-blend-mode:soft-light;
+	opacity:0.55; /* lower so it doesn't wash out text */
+	z-index:-1; /* sit behind page content so text stays visible */
+	filter:blur(8px);
+	animation:gloss-move var(--gloss-duration) linear infinite;
+	will-change:transform;
+}
+
+@keyframes gloss-move{
+	0%{transform:translateX(-120%)}
+	100%{transform:translateX(120%)}
+}
+
+/* Liquid glass (glassmorphism) applied broadly to elements
+	 Uses a ::before overlay so markup doesn't need to change.
+	 Excludes media, code and form controls for safety/performance. */
+:root{
+	--glass-overlay: rgba(255,255,255,0.03);
+	--glass-border: rgba(255,255,255,0.06);
+	--glass-blur: 8px;
+	--glass-radius: 12px;
+	/* remove box shadows site-wide */
+	--glass-shadow: none;
+}
+:root[data-theme='light']{
+	--glass-overlay: rgba(255,255,255,0.72);
+	--glass-border: rgba(0,0,0,0.06);
+	--glass-blur: 6px;
+	/* remove box shadows in light theme as well */
+	--glass-shadow: none;
+}
+
+/* Apply to most elements but exclude things that shouldn't get it */
+
+/* Apply glass overlay behind element content; exclude media/code/form controls */
+:where(*):not(html):not(body):not(img):not(svg):not(video):not(canvas):not(pre):not(code):not(script):not(style):not(input):not(textarea):not(select){
+	position:relative; /* creates positioning context and stacking context */
+	z-index:0; /* ensure children can stack above (::before uses negative z-index) */
+	border-radius:var(--glass-radius);
+}
+
+:where(*):not(html):not(body):not(img):not(svg):not(video):not(canvas):not(pre):not(code):not(script):not(style):not(input):not(textarea):not(select)::before{
+	content:'';
+	position:absolute;
+	inset:0;
+	border-radius:inherit;
+	background:linear-gradient(180deg, var(--glass-overlay), rgba(255,255,255,0));
+	pointer-events:none;
+	z-index:-1; /* put overlay behind element content so text remains visible */
+	backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+	-webkit-backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+	border:1px solid var(--glass-border);
+	box-shadow:var(--glass-shadow);
+	transition:background-color 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+/* Respect reduced motion for users who prefer less movement/visual churn */
+@media (prefers-reduced-motion: reduce){
+	:where(*):not(html):not(body):not(img):not(svg):not(video):not(canvas):not(pre):not(code):not(script):not(style):not(input):not(textarea):not(select)::before{
+		transition:none;
+		backdrop-filter:none;
+		-webkit-backdrop-filter:none;
+		box-shadow:none;
+	}
+	body::before{animation:none}
+}
