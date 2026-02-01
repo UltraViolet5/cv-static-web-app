@@ -1,8 +1,8 @@
-:root{--bg:#0b0c0f;--text:#e6e6e6;--muted:#9aa4af;--card:#151821;--brand:#6aa0ff;--link:#4ea1ff;--accent:#ffd166;--header-text:#1f2328}
+:root{--bg:#0b0c0f;--text:#e6e6e6;--muted:#9aa4af;--card:#151821;--brand:#6aa0ff;--link:#4ea1ff;--accent:#ffd166;--header-text:#1f2328;--content-scale:1}
 :root[data-theme='light']{--bg:#ffffff;--text:#1f2328;--muted:#5a6b7b;--card:#f6f8fa;--brand:#265dff;--link:#1d4ed8;--accent:#fb8500;--header-text:var(--text)}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background-color:var(--bg);color:var(--text);line-height:1.6}
+body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background-color:var(--bg);color:var(--text);line-height:1.6; font-size:calc(16px * var(--content-scale, 1));}
 
 /* Fixed background image placed on the root element via a pseudo-element.
    This keeps the image fixed to the viewport while the page content scrolls.
@@ -17,7 +17,7 @@ html::before{
 	background-repeat:no-repeat;
 	z-index:-2; /* behind the gloss overlay (body::before z-index:-1) and behind content */
 }
-.container{max-width:1050px;margin:0 auto;padding:24px}
+.container{max-width:calc(1050px * var(--content-scale, 1));margin:0 auto;padding:24px;transition:max-width 360ms cubic-bezier(.2,.9,.2,1),padding 240ms ease}
 h1{font-size:2.25rem;margin:8px 0}
 .subtitle{color:var(--muted);margin-top:-6px}
 .contact{list-style:none;padding:0;margin:12px 0;display:flex;flex-wrap:wrap;gap:12px}
@@ -124,4 +124,33 @@ body::before{
 		box-shadow:none;
 	}
 	body::before{animation:none}
+}
+
+/* Decorative semicircles fixed at left/right edges. They live behind content. */
+.side-circle{position:fixed;top:50%;width:52vmin;height:52vmin;border-radius:50%;pointer-events:none;z-index:-3;transform:translateY(-50%);opacity:0.55}
+.side-circle.left{left:0;transform:translate(-26vmin, -50%);background:radial-gradient(circle at 30% 40%, rgba(106,160,255,0.18), rgba(106,160,255,0.06) 45%, transparent 60%)}
+.side-circle.right{right:0;transform:translate(26vmin, -50%);background:radial-gradient(circle at 70% 60%, rgba(255,209,102,0.14), rgba(255,209,102,0.04) 45%, transparent 60%)}
+
+/* Small accessibility fallback: when reduced motion is requested, keep scale steady */
+@media (prefers-reduced-motion: reduce){
+	.container{transition:none}
+}
+
+/* 3D scene / wheel styles for rolling effect */
+.scene{position:relative;perspective:1200px;overflow:visible}
+.wheel{transform-style:preserve-3d;will-change:transform;transition:transform 260ms cubic-bezier(.2,.9,.2,1);transform-origin:center center}
+.container{backface-visibility:hidden; -webkit-backface-visibility:hidden}
+
+@media (prefers-reduced-motion: reduce){
+	.wheel{transition:none}
+}
+
+/* Canvas used by the cylinder renderer: hidden by default until capture is ready */
+#cylinder-canvas{
+	display:none;
+	position:fixed;
+	inset:0;
+	z-index:9999;
+	pointer-events:none;
+	background:transparent;
 }

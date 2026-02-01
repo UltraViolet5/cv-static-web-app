@@ -12,6 +12,11 @@
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
+  <!-- semicircles at the sides; purely decorative and updated via CSS -->
+  <div class="side-circle left" aria-hidden="true"></div>
+  <div class="side-circle right" aria-hidden="true"></div>
+  <!-- canvas used for the WebGL cylindrical renderer (shown after capture) -->
+  <canvas id="cylinder-canvas" aria-hidden="true"></canvas>
   <header class="container">
     <h1>Krzysztof Fieber</h1>
     <p class="subtitle">Full Stack .NET Developer</p>
@@ -26,7 +31,9 @@
       <a href="/index.html" hreflang="pl">PL</a> | <a href="/index.en.html" hreflang="en">EN</a>
     </nav>
   </header>
-  <main class="container">
+  <div class="scene" aria-hidden="false">
+    <div class="wheel">
+      <main class="container">
     <section>
       <h2>Podsumowanie</h2>
       <p>Full Stack .NET Developer z ponad 4-letnim doświadczeniem komercyjnym w tworzeniu aplikacji enterprise: backend, frontend i mobile. Silne zaplecze w .NET, React, Angular, SQL, Azure i architekturach konteneryzowanych. Doświadczenie w projektowaniu end‑to‑end, integracjach chmury, uwierzytelnianiu oraz systemach data‑driven.</p>
@@ -123,7 +130,9 @@
     <footer class="footer">
       <p>© 2026 Krzysztof Fieber. Strona statyczna hostowana w Azure Static Web Apps.</p>
     </footer>
-  </main>
+      </main>
+    </div>
+  </div>
 
   <script>
     // Prosty dark-mode (auto oraz przełącznik klawiaturą: D)
@@ -133,5 +142,54 @@
     prefersDark.addEventListener('change', e => setTheme(e.matches));
     window.addEventListener('keydown', (e)=>{ if(e.key.toLowerCase()==='d') document.documentElement.dataset.theme = (document.documentElement.dataset.theme==='dark'?'light':'dark');});
   </script>
+  <script>
+    // Wheel-style rolling effect: rotate the page around the X axis as you scroll
+    // and additionally modulate content scale so center appears larger.
+    (function(){
+      const doc = document.documentElement;
+      const wheel = document.querySelector('.wheel');
+      const minScale = 0.78; // scale at extremes
+      const maxScale = 1.06; // scale at center
+      const maxAngle = 40; // degrees, how much the page tilts at extremes
+
+      function update(){
+        const vh = window.innerHeight;
+        const docH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, vh);
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const centerY = scrollY + vh / 2;
+        // u in [-1, 1]
+        let u = (centerY / docH) * 2 - 1;
+        u = Math.max(-1, Math.min(1, u));
+
+        // rotateX mapping (wheel-like roll). positive u -> rotate downwards
+        const angle = u * maxAngle;
+        if (wheel) wheel.style.transform = `rotateX(${angle}deg)`;
+
+        // scale follows a semicircle profile so center is larger
+        const semicircle = Math.sqrt(Math.max(0, 1 - u * u));
+        const scale = minScale + (maxScale - minScale) * semicircle;
+        doc.style.setProperty('--content-scale', scale.toFixed(4));
+      }
+
+      // init + performance-friendly listeners
+      update();
+      let rAF = null;
+      const onScroll = () => { if (rAF) cancelAnimationFrame(rAF); rAF = requestAnimationFrame(update); };
+      window.addEventListener('scroll', onScroll, {passive:true});
+      window.addEventListener('resize', onScroll);
+
+      // respect reduced-motion
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      mq.addEventListener('change', () => {
+        if (mq.matches){
+          if (wheel) wheel.style.transform = 'none';
+          doc.style.setProperty('--content-scale', '1');
+        } else update();
+      });
+    })();
+  </script>
+  <!-- Cylinder renderer: captures the page into a texture and maps onto a WebGL cylinder -->
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script src="/scripts/cylinder.js"></script>
 </body>
 </html>
